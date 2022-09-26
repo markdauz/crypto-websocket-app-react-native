@@ -24,7 +24,7 @@ const SearchBar = (props: SearchBarProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>CRYPTOCURRENCY</Text>
+      <Text style={styles.title}>Wallet.com</Text>
       <View style={styles.inputContainer}>
         <MaterialIcons
           name="search"
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#0091EA",
     marginBottom: 20,
-    textTransform: "lowercase",
   },
   inputContainer: {
     backgroundColor: "rgb(41, 47, 56)",
