@@ -7,7 +7,7 @@ import { LineShadow } from "./LineShadow";
 type ChartProps = {
   height?: number;
   width?: number;
-  prices: any;
+  prices: string[];
 };
 
 const Chart = (props: ChartProps) => {

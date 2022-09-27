@@ -14,13 +14,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Context from "../../context/store/coinBase-context";
 import { images } from "../../constants/images";
 import Chart from "../Chart";
-import { Easing } from "react-native-reanimated";
 
 type EntityProps = {
   productId?: string;
-  price?: string[] | number[];
+  price?: string[];
   time?: Date[] | string[];
-  open?: string[] | number[];
+  open?: string[];
 };
 
 const Entity = (props: EntityProps) => {

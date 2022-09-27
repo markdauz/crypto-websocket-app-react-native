@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { ContextType, CurrencyType } from "../types";
 
 // CONTEXT API
 import Context from "../context/store/coinBase-context";
@@ -9,17 +10,17 @@ type SearchBarProps = {};
 
 const SearchBar = (props: SearchBarProps) => {
   // CONTEXT API
-  const { currencies, handleEntityChange } = useContext(Context);
+  const { currencies, handleEntityChange } = useContext<ContextType>(Context);
 
   const [value, setValue] = useState<string>("");
 
-  const entityTermHandler = (searchTerm) => {
+  const entityTermHandler = (searchTerm: string) => {
     /**
      * COINBASE API
      */
     handleEntityChange(
       currencies.filter(
-        (currency: any) =>
+        (currency: CurrencyType) =>
           currency.base_currency.toLowerCase() === searchTerm.toLowerCase()
       )
     );

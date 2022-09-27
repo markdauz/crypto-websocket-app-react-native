@@ -22,7 +22,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
       .then((data) => setEntities(data));
   };
   useEffect(() => {
-    // fetchEntities();
+    fetchEntities();
   }, [entities]);
 
   useEffect(() => {
