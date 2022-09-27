@@ -1,4 +1,11 @@
-import { useState, useEffect, useRef, createContext, ReactNode } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  createContext,
+  useCallback,
+  ReactNode,
+} from "react";
 
 const Context = createContext<any>({});
 
@@ -6,17 +13,38 @@ const URL = "https://api.pro.coinbase.com";
 const wsURL = "wss://ws-feed.pro.coinbase.com";
 
 export function ContextProvider({ children }: { children: ReactNode }) {
-  const [currencies, setCurrencies] = useState([]);
-  const [pair, setPair] = useState("");
-  const [, setPrice] = useState("0.00");
-  const [pairArr, setPairArray] = useState([]);
+  const [currencies, setCurrencies] = useState<any[]>([]);
+  const [pair, setPair] = useState<string>("");
+  const [, setPrice] = useState<string>("0.00");
+  const [pairArr, setPairArray] = useState<any[]>([]);
+  const [error, setError] = useState<string>("");
 
   const webSocket = useRef(null);
   let first = useRef(false);
 
+  const filterData = (data) => {
+    return data.sort((a, b) => {
+      if (a.base_currency < b.base_currency) {
+        return -1;
+      }
+      if (a.base_currency > b.base_currency) {
+        return 1;
+      }
+      return 0;
+    });
+  };
+
   useEffect(() => {
     webSocket.current = new WebSocket(wsURL);
+    webSocket.current.onopen = () => console.log("Websocket opened");
+    webSocket.current.onclose = () => console.log("Websocket closed");
 
+    return () => {
+      webSocket.current.close();
+    };
+  }, []);
+
+  useEffect(() => {
     let pairs = [];
 
     const apiCall = async () => {
@@ -41,22 +69,16 @@ export function ContextProvider({ children }: { children: ReactNode }) {
         }
       });
 
-      filtered = filtered.sort((a, b) => {
-        if (a.base_currency < b.base_currency) {
-          return -1;
-        }
-        if (a.base_currency > b.base_currency) {
-          return 1;
-        }
-        return 0;
-      });
+      filtered = filterData(filtered);
 
       setCurrencies(filtered);
 
       first.current = true;
     };
-
     apiCall();
+    return () => {
+      setCurrencies([]);
+    };
   }, []);
 
   useEffect(() => {
@@ -74,7 +96,10 @@ export function ContextProvider({ children }: { children: ReactNode }) {
 
     webSocket.current.onmessage = (e) => {
       let data = JSON.parse(e.data);
-      console.log(data);
+      if (data.message === "Failed to subscribe") {
+        setError("Please try again later!");
+      }
+
       if (data.type !== "ticker") {
         return;
       } else {
@@ -91,7 +116,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
     setPair(entity[0]?.id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     let unsubMsg = {
       type: "unsubscribe",
       product_ids: [id],
@@ -120,6 +145,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
   );
 
   const context = {
+    error,
     currencies,
     result,
     handleEntityChange,

@@ -11,7 +11,7 @@ import EntityList from "../components/CoinBase/EntityList";
 type PortfolioProps = {};
 
 const Portfolio = (props: PortfolioProps) => {
-  const { result } = useContext(Context);
+  const { result, error } = useContext(Context);
 
   return (
     <SafeAreaView style={styles.container}>
