@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  createContext,
-  useCallback,
-  ReactNode,
-} from "react";
+import { useState, useEffect, useRef, createContext, ReactNode } from "react";
 
 const Context = createContext<any>({});
 
@@ -22,7 +15,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
   const webSocket = useRef(null);
   let first = useRef(false);
 
-  const filterData = (data) => {
+  const sortData = (data) => {
     return data.sort((a, b) => {
       if (a.base_currency < b.base_currency) {
         return -1;
@@ -34,11 +27,29 @@ export function ContextProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const filterData = (data) => {
+    return data.filter((pair) => {
+      if (
+        pair.quote_currency === "USD" ||
+        pair.base_currency === "BTC" ||
+        pair.base_currency === "ETH" ||
+        pair.base_currency === "XRP" ||
+        pair.base_currency === "BCH" ||
+        pair.base_currency === "LTC" ||
+        pair.base_currency === "DASH" ||
+        pair.base_currency === "ADA" ||
+        pair.base_currency === "XLM" ||
+        pair.base_currency === "EOS"
+      ) {
+        return pair;
+      }
+    });
+  };
+
   useEffect(() => {
     webSocket.current = new WebSocket(wsURL);
     webSocket.current.onopen = () => console.log("Websocket opened");
     webSocket.current.onclose = () => console.log("Websocket closed");
-
     return () => {
       webSocket.current.close();
     };
@@ -52,24 +63,8 @@ export function ContextProvider({ children }: { children: ReactNode }) {
         .then((res) => res.json())
         .then((data) => (pairs = data));
 
-      let filtered = pairs.filter((pair) => {
-        if (
-          pair.quote_currency === "USD" ||
-          pair.base_currency === "BTC" ||
-          pair.base_currency === "ETH" ||
-          pair.base_currency === "XRP" ||
-          pair.base_currency === "BCH" ||
-          pair.base_currency === "LTC" ||
-          pair.base_currency === "DASH" ||
-          pair.base_currency === "ADA" ||
-          pair.base_currency === "XLM" ||
-          pair.base_currency === "EOS"
-        ) {
-          return pair;
-        }
-      });
-
-      filtered = filterData(filtered);
+      let filtered = filterData(pairs);
+      filtered = sortData(filtered);
 
       setCurrencies(filtered);
 
@@ -96,6 +91,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
 
     webSocket.current.onmessage = (e) => {
       let data = JSON.parse(e.data);
+      console.log(data);
       if (data.message === "Failed to subscribe") {
         setError("Please try again later!");
       }

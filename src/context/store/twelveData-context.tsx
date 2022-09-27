@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, createContext, ReactNode } from "react";
-import { data } from "../constants/data";
 
 const Context = createContext<any>({});
 
@@ -132,7 +131,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
     result,
     selectedEntities: pairArr,
     entity,
-    entities: mapEntities(data),
+    entities: mapEntities(entities),
     handleEntityChange,
     handleDelete,
   };

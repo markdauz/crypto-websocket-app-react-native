@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { StyleSheet, View, SafeAreaView, ScrollView } from "react-native";
+import "react-native-reanimated";
 
 import SearchBar from "../components/SearchBar";
-import Context from "../store/coinBase-context";
+import Context from "../context/store/coinBase-context";
 
 // CoinBase API
 import Entity from "../components/CoinBase/Entity";
@@ -20,13 +21,14 @@ const Portfolio = (props: PortfolioProps) => {
           <SearchBar />
         </View>
         {/* COINBASE API*/}
-        {result.length === 0 ? (
+
+        {result?.length === 0 ? (
           <View style={styles.wrapper}>
             <EntityList />
           </View>
         ) : (
           <View style={styles.wrapper}>
-            {result.map((entity: any) => (
+            {result?.map((entity: any) => (
               <Entity
                 key={entity.product_id}
                 productId={entity.product_id}

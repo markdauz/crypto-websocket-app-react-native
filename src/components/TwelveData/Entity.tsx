@@ -11,7 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import Context from "../../store/twelveData-context";
+import Context from "../../context/store/twelveData-context";
 import { images } from "../../constants/images";
 import Chart from "../Chart";
 

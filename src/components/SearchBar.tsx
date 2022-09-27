@@ -2,12 +2,15 @@ import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import Context from "../store/coinBase-context";
+// CONTEXT API
+import Context from "../context/store/coinBase-context";
 
 type SearchBarProps = {};
 
 const SearchBar = (props: SearchBarProps) => {
+  // CONTEXT API
   const { currencies, handleEntityChange } = useContext(Context);
+
   const [value, setValue] = useState<string>("");
 
   const entityTermHandler = (searchTerm) => {
