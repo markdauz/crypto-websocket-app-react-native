@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, createContext, ReactNode } from "react";
 import { ContextType, CurrencyType, PairType } from "../../types";
 
 const Context = createContext<ContextType>({
-  error: "",
   currencies: [],
   result: [
     {
@@ -24,7 +23,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
   const [pair, setPair] = useState<string>("");
   const [, setPrice] = useState<string>("0.00");
   const [pairArr, setPairArray] = useState<PairType[]>([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
 
   const webSocket = useRef<any>(null);
   let first = useRef<boolean>(false);
@@ -105,9 +104,6 @@ export function ContextProvider({ children }: { children: ReactNode }) {
 
     webSocket.current.onmessage = (e: any) => {
       let data = JSON.parse(e.data);
-      if (data.message === "Failed to subscribe") {
-        setError("Network Busy. Please try again later!");
-      }
 
       if (data.type !== "ticker") {
         return;

@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import { StyleSheet, View, SafeAreaView, ScrollView } from "react-native";
-import "react-native-reanimated";
 
 import SearchBar from "../components/SearchBar";
 import Context from "../context/store/coinBase-context";
@@ -12,7 +11,7 @@ import EntityList from "../components/CoinBase/EntityList";
 type PortfolioProps = {};
 
 const Portfolio = (props: PortfolioProps) => {
-  const { result, error } = useContext(Context);
+  const { result } = useContext(Context);
 
   return (
     <SafeAreaView style={styles.container}>

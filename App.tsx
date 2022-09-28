@@ -1,15 +1,19 @@
+import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
+import { ModalProvider } from "react-native-use-modal";
 import { ContextProvider } from "./src/context/store/coinBase-context";
 import StackNavigator from "./src/navigators/StackNavigator";
 
 export default function App() {
   return (
     <ContextProvider>
-      <StatusBar style="auto" />
-      <NavigationContainer>
-        <StackNavigator />
-      </NavigationContainer>
+      <ModalProvider>
+        <StatusBar style="auto" />
+        <NavigationContainer>
+          <StackNavigator />
+        </NavigationContainer>
+      </ModalProvider>
     </ContextProvider>
   );
 }

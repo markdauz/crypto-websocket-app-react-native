@@ -37,7 +37,6 @@ export type CurrencyType = {
 };
 
 export type ContextType = {
-  error: string;
   currencies: CurrencyType[];
   result: {
     product_id: string;

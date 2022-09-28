@@ -1,14 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+
 import { ContextType, CurrencyType } from "../types";
 
 // CONTEXT API
 import Context from "../context/store/coinBase-context";
+import { useAlertModal } from "../hooks/modal";
 
 type SearchBarProps = {};
 
 const SearchBar = (props: SearchBarProps) => {
+  const alertModal = useAlertModal();
   // CONTEXT API
   const { currencies, handleEntityChange } = useContext<ContextType>(Context);
 
@@ -18,13 +21,31 @@ const SearchBar = (props: SearchBarProps) => {
     /**
      * COINBASE API
      */
-    handleEntityChange(
-      currencies.filter(
-        (currency: CurrencyType) =>
-          currency.base_currency.toLowerCase() === searchTerm.toLowerCase()
-      )
+    const filteredTerm = currencies.filter(
+      (currency: CurrencyType) =>
+        currency.base_currency.toLowerCase() === searchTerm.toLowerCase()
     );
+
+    if (filteredTerm.length === 0) {
+      showUnknownModal();
+    }
+
+    handleEntityChange(filteredTerm);
   };
+
+  const showDelistedModal = useCallback(async () => {
+    await alertModal.show({
+      title: "Delisted Currency",
+      message: `The currency "${value.toUpperCase()}" has been delisted from our database. Please search again.`,
+    });
+  }, [alertModal, value]);
+
+  const showUnknownModal = useCallback(async () => {
+    await alertModal.show({
+      title: "Unknown Currency",
+      message: `The currency "${value.toUpperCase()}" is not available in our database. Please search again.`,
+    });
+  }, [alertModal, value]);
 
   return (
     <View style={styles.container}>
