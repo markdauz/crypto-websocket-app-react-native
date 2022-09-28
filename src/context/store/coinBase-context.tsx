@@ -46,7 +46,6 @@ export function ContextProvider({ children }: { children: ReactNode }) {
         pair.quote_currency === "USD" ||
         pair.base_currency === "BTC" ||
         pair.base_currency === "ETH" ||
-        pair.base_currency === "XRP" ||
         pair.base_currency === "BCH" ||
         pair.base_currency === "LTC" ||
         pair.base_currency === "DASH" ||
@@ -93,7 +92,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
     if (!first.current) {
       return;
     }
-
+    webSocket.current.onopen = () => console.log("Websocket opened");
     let msg = {
       type: "subscribe",
       product_ids: [pair],

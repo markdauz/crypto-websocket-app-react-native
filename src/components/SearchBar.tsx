@@ -33,13 +33,6 @@ const SearchBar = (props: SearchBarProps) => {
     handleEntityChange(filteredTerm);
   };
 
-  const showDelistedModal = useCallback(async () => {
-    await alertModal.show({
-      title: "Delisted Currency",
-      message: `The currency "${value.toUpperCase()}" has been delisted from our database. Please search again.`,
-    });
-  }, [alertModal, value]);
-
   const showUnknownModal = useCallback(async () => {
     await alertModal.show({
       title: "Unknown Currency",
